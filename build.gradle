@@ -1,0 +1,29 @@
+group 'spark-scala-example'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'scala'
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+task initProject(description: 'Initialize project directory structure.') << {
+    def defaultPackage = 'com/scala/projects'
+    [ 'scala', 'resources'].each {
+        sourceSets*."${it}".srcDirs*.each { dir ->
+            def newDir = new File(dir, defaultPackage)
+            logger.info "Creating directory $newDir"  // gradle -i shows this message.
+            newDir.mkdirs()  // Create dir.
+        }
+    }
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.11.8'
+    testCompile "org.scala-lang:scala-library:2.11.8"
+    compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.1.0'
+    compile group: 'org.apache.spark', name: 'spark-sql_2.11', version: '2.1.0'
+    compile group: 'org.scala-lang' , name: 'scala-xml' , version: '2.11.0-M4'
+}
